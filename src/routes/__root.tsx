@@ -76,11 +76,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "IEQ.V Ferraz — Igreja do Evangelho Quadrangular · Campos do Jordão" },
       { name: "description", content: "IEQ.V Ferraz: cultos, estudos bíblicos, doações, transporte gratuito, cursos, rádio online e Enciclopédia Bíblica com IA." },
       { name: "author", content: "IEQ.V Ferraz" },
-      { property: "og:title", content: "IEQ.V Ferraz · Campos do Jordão" },
-      { property: "og:description", content: "Comunidade de fé, acolhimento e estudo da Palavra." },
+      { property: "og:title", content: "IEQ.V Ferraz — Igreja do Evangelho Quadrangular · Campos do Jordão" },
+      { property: "og:description", content: "IEQ.V Ferraz: cultos, estudos bíblicos, doações, transporte gratuito, cursos, rádio online e Enciclopédia Bíblica com IA." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "IEQ.V Ferraz — Igreja do Evangelho Quadrangular · Campos do Jordão" },
+      { name: "twitter:description", content: "IEQ.V Ferraz: cultos, estudos bíblicos, doações, transporte gratuito, cursos, rádio online e Enciclopédia Bíblica com IA." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/6AaFSc2foJeWjKEI4fGt5Eze1jz1/social-images/social-1778506397702-1000209763.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/6AaFSc2foJeWjKEI4fGt5Eze1jz1/social-images/social-1778506397702-1000209763.webp" },
     ],
     links: [
       {
