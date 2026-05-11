@@ -1,7 +1,8 @@
 import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Menu, X, Church, BookOpenCheck, LogOut, User } from "lucide-react";
+import { Menu, X, Church, BookOpenCheck, LogOut, User, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdmin } from "@/hooks/use-admin";
 
 const navItems = [
   { to: "/", label: "Início" },
@@ -22,6 +23,7 @@ export function Layout() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const path = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const { isAdmin } = useAdmin();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setUserEmail(data.session?.user.email ?? null));
@@ -70,6 +72,11 @@ export function Layout() {
           <div className="hidden md:flex items-center gap-2">
             {userEmail ? (
               <>
+                {isAdmin && (
+                  <Link to="/admin" className="flex items-center gap-1.5 rounded-full bg-accent/20 px-3 py-1.5 text-sm hover:bg-accent/30">
+                    <Shield className="h-4 w-4" /> Admin
+                  </Link>
+                )}
                 <Link to="/meus-estudos" className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-sm hover:bg-accent/20">
                   <User className="h-4 w-4" /> {userEmail.split("@")[0]}
                 </Link>
@@ -112,6 +119,11 @@ export function Layout() {
               ))}
               {userEmail ? (
                 <>
+                  {isAdmin && (
+                    <Link to="/admin" onClick={() => setOpen(false)} className="col-span-2 rounded-lg bg-accent/30 px-3 py-2 text-sm flex items-center gap-2">
+                      <Shield className="h-4 w-4" /> Painel Admin
+                    </Link>
+                  )}
                   <Link to="/meus-estudos" onClick={() => setOpen(false)} className="col-span-2 rounded-lg bg-accent/20 px-3 py-2 text-sm flex items-center gap-2">
                     <BookOpenCheck className="h-4 w-4" /> Meus estudos
                   </Link>
@@ -148,9 +160,9 @@ export function Layout() {
           <div>
             <div className="font-semibold mb-2">Cultos</div>
             <ul className="space-y-1 text-muted-foreground">
-              <li>Quarta — 19h30 (Estudo)</li>
-              <li>Sexta — 20h (Oração)</li>
-              <li>Domingo — 10h e 18h</li>
+              <li>Quarta — 19h30</li>
+              <li>Sexta — 19h00</li>
+              <li>Domingo — 19h00</li>
             </ul>
           </div>
           <div>
