@@ -9,13 +9,16 @@ export const Route = createFileRoute("/sobre")({
 function Sobre() {
   return (
     <>
-      <PageHeader eyebrow="Apresentação" title="Nossa história" description="Há muitos anos servindo, acolhendo e transformando vidas pela graça de Deus." />
+      <PageHeader eyebrow="IEQ.V Ferraz" title="Nossa história" description="Igreja do Evangelho Quadrangular — Vila Ferraz, Campos do Jordão · SP. Servindo, acolhendo e transformando vidas pela graça de Deus." />
       <div className="mx-auto max-w-4xl px-4 py-12 space-y-8">
         <p className="text-lg leading-relaxed text-foreground/90">
-          A Igreja Viva nasceu do desejo de criar um espaço onde toda pessoa pudesse encontrar
-          fé, propósito e uma família. Desde o início, caminhamos lado a lado com nossa
-          comunidade, levando o Evangelho com amor e ações concretas.
+          A IEQ.V Ferraz nasceu do desejo de criar um espaço onde toda pessoa pudesse encontrar
+          fé, propósito e uma família em Cristo. Caminhamos lado a lado com nossa comunidade
+          em Campos do Jordão, levando o Evangelho com amor e ações concretas.
         </p>
+        <div className="rounded-2xl border border-border bg-secondary/40 p-5 text-sm">
+          <strong>Endereço:</strong> Rua João Rodrigues da Silva, 247 — Vila Ferraz, Campos do Jordão · SP
+        </div>
         <div className="grid gap-6 md:grid-cols-3">
           {[
             { day: "Quarta", time: "19h30", label: "Estudo bíblico" },
