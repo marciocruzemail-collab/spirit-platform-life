@@ -9,38 +9,234 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TransporteRouteImport } from './routes/transporte'
+import { Route as SobreRouteImport } from './routes/sobre'
+import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as RadioRouteImport } from './routes/radio'
+import { Route as MuralRouteImport } from './routes/mural'
+import { Route as EstudosRouteImport } from './routes/estudos'
+import { Route as EquipeRouteImport } from './routes/equipe'
+import { Route as DoacoesRouteImport } from './routes/doacoes'
+import { Route as CursosRouteImport } from './routes/cursos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EstudosForumRouteImport } from './routes/estudos.forum'
 
+const TransporteRoute = TransporteRouteImport.update({
+  id: '/transporte',
+  path: '/transporte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SobreRoute = SobreRouteImport.update({
+  id: '/sobre',
+  path: '/sobre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicosRoute = ServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RadioRoute = RadioRouteImport.update({
+  id: '/radio',
+  path: '/radio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MuralRoute = MuralRouteImport.update({
+  id: '/mural',
+  path: '/mural',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EstudosRoute = EstudosRouteImport.update({
+  id: '/estudos',
+  path: '/estudos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquipeRoute = EquipeRouteImport.update({
+  id: '/equipe',
+  path: '/equipe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoacoesRoute = DoacoesRouteImport.update({
+  id: '/doacoes',
+  path: '/doacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CursosRoute = CursosRouteImport.update({
+  id: '/cursos',
+  path: '/cursos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EstudosForumRoute = EstudosForumRouteImport.update({
+  id: '/forum',
+  path: '/forum',
+  getParentRoute: () => EstudosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cursos': typeof CursosRoute
+  '/doacoes': typeof DoacoesRoute
+  '/equipe': typeof EquipeRoute
+  '/estudos': typeof EstudosRouteWithChildren
+  '/mural': typeof MuralRoute
+  '/radio': typeof RadioRoute
+  '/servicos': typeof ServicosRoute
+  '/sobre': typeof SobreRoute
+  '/transporte': typeof TransporteRoute
+  '/estudos/forum': typeof EstudosForumRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cursos': typeof CursosRoute
+  '/doacoes': typeof DoacoesRoute
+  '/equipe': typeof EquipeRoute
+  '/estudos': typeof EstudosRouteWithChildren
+  '/mural': typeof MuralRoute
+  '/radio': typeof RadioRoute
+  '/servicos': typeof ServicosRoute
+  '/sobre': typeof SobreRoute
+  '/transporte': typeof TransporteRoute
+  '/estudos/forum': typeof EstudosForumRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cursos': typeof CursosRoute
+  '/doacoes': typeof DoacoesRoute
+  '/equipe': typeof EquipeRoute
+  '/estudos': typeof EstudosRouteWithChildren
+  '/mural': typeof MuralRoute
+  '/radio': typeof RadioRoute
+  '/servicos': typeof ServicosRoute
+  '/sobre': typeof SobreRoute
+  '/transporte': typeof TransporteRoute
+  '/estudos/forum': typeof EstudosForumRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/cursos'
+    | '/doacoes'
+    | '/equipe'
+    | '/estudos'
+    | '/mural'
+    | '/radio'
+    | '/servicos'
+    | '/sobre'
+    | '/transporte'
+    | '/estudos/forum'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/cursos'
+    | '/doacoes'
+    | '/equipe'
+    | '/estudos'
+    | '/mural'
+    | '/radio'
+    | '/servicos'
+    | '/sobre'
+    | '/transporte'
+    | '/estudos/forum'
+  id:
+    | '__root__'
+    | '/'
+    | '/cursos'
+    | '/doacoes'
+    | '/equipe'
+    | '/estudos'
+    | '/mural'
+    | '/radio'
+    | '/servicos'
+    | '/sobre'
+    | '/transporte'
+    | '/estudos/forum'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CursosRoute: typeof CursosRoute
+  DoacoesRoute: typeof DoacoesRoute
+  EquipeRoute: typeof EquipeRoute
+  EstudosRoute: typeof EstudosRouteWithChildren
+  MuralRoute: typeof MuralRoute
+  RadioRoute: typeof RadioRoute
+  ServicosRoute: typeof ServicosRoute
+  SobreRoute: typeof SobreRoute
+  TransporteRoute: typeof TransporteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/transporte': {
+      id: '/transporte'
+      path: '/transporte'
+      fullPath: '/transporte'
+      preLoaderRoute: typeof TransporteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sobre': {
+      id: '/sobre'
+      path: '/sobre'
+      fullPath: '/sobre'
+      preLoaderRoute: typeof SobreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servicos': {
+      id: '/servicos'
+      path: '/servicos'
+      fullPath: '/servicos'
+      preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/radio': {
+      id: '/radio'
+      path: '/radio'
+      fullPath: '/radio'
+      preLoaderRoute: typeof RadioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mural': {
+      id: '/mural'
+      path: '/mural'
+      fullPath: '/mural'
+      preLoaderRoute: typeof MuralRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estudos': {
+      id: '/estudos'
+      path: '/estudos'
+      fullPath: '/estudos'
+      preLoaderRoute: typeof EstudosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/equipe': {
+      id: '/equipe'
+      path: '/equipe'
+      fullPath: '/equipe'
+      preLoaderRoute: typeof EquipeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doacoes': {
+      id: '/doacoes'
+      path: '/doacoes'
+      fullPath: '/doacoes'
+      preLoaderRoute: typeof DoacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cursos': {
+      id: '/cursos'
+      path: '/cursos'
+      fullPath: '/cursos'
+      preLoaderRoute: typeof CursosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +244,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/estudos/forum': {
+      id: '/estudos/forum'
+      path: '/forum'
+      fullPath: '/estudos/forum'
+      preLoaderRoute: typeof EstudosForumRouteImport
+      parentRoute: typeof EstudosRoute
+    }
   }
 }
 
+interface EstudosRouteChildren {
+  EstudosForumRoute: typeof EstudosForumRoute
+}
+
+const EstudosRouteChildren: EstudosRouteChildren = {
+  EstudosForumRoute: EstudosForumRoute,
+}
+
+const EstudosRouteWithChildren =
+  EstudosRoute._addFileChildren(EstudosRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CursosRoute: CursosRoute,
+  DoacoesRoute: DoacoesRoute,
+  EquipeRoute: EquipeRoute,
+  EstudosRoute: EstudosRouteWithChildren,
+  MuralRoute: MuralRoute,
+  RadioRoute: RadioRoute,
+  ServicosRoute: ServicosRoute,
+  SobreRoute: SobreRoute,
+  TransporteRoute: TransporteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
