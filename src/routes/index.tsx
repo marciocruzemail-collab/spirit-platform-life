@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Heart, Users, BookOpen, Bus, Radio, Calendar } from "lucide-react";
+import { Heart, Users, BookOpen as BookOpenIcon, Bus, Radio, BookOpen } from "lucide-react";
 import heroImg from "@/assets/hero-church.jpg";
 
 export const Route = createFileRoute("/")({
@@ -7,12 +7,12 @@ export const Route = createFileRoute("/")({
 });
 
 const highlights = [
+  { to: "/biblia", icon: BookOpen, title: "Enciclopédia Bíblica IA", desc: "Estude a Bíblia com auxílio inteligente e salve seus estudos." },
   { to: "/doacoes", icon: Heart, title: "Doações", desc: "Doe ou receba alimentos com carinho." },
   { to: "/transporte", icon: Bus, title: "Transporte gratuito", desc: "Nossa Kombi passa no seu bairro." },
-  { to: "/estudos", icon: BookOpen, title: "Estudos bíblicos", desc: "Infantil, Teen, Crazy e Full." },
+  { to: "/estudos", icon: BookOpenIcon, title: "Estudos bíblicos", desc: "Infantil, Teen, Crazy e Full." },
   { to: "/cursos", icon: Users, title: "Cursos online", desc: "Batismo, Primeiros Passos e mais." },
   { to: "/radio", icon: Radio, title: "Rádio ao vivo", desc: "Pregações, vídeos e entrevistas." },
-  { to: "/mural", icon: Calendar, title: "Mural", desc: "Testemunhos, cultos e projetos sociais." },
 ];
 
 function Home() {
@@ -32,27 +32,27 @@ function Home() {
         <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-36">
           <div className="max-w-2xl">
             <div className="text-xs uppercase tracking-[0.25em] text-accent font-semibold mb-4">
-              Bem-vindo
+              IEQ.V Ferraz · Campos do Jordão
             </div>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
               Um lugar de fé, esperança e acolhimento.
             </h1>
             <p className="mt-5 text-lg text-muted-foreground max-w-xl">
-              Cultos às quartas, sextas e domingos. Venha conhecer nossa comunidade e os
-              projetos que transformam vidas.
+              Cultos quarta, sexta e domingo. Venha conhecer nossa comunidade, os projetos sociais
+              e a nova Enciclopédia Bíblica com IA para estudar a Palavra.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/sobre"
+                to="/biblia"
                 className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] hover:opacity-95 transition"
               >
-                Nossa história
+                Estudar a Bíblia com IA
               </Link>
               <Link
-                to="/transporte"
+                to="/sobre"
                 className="rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary transition"
               >
-                Pegar a Kombi
+                Nossa história
               </Link>
             </div>
           </div>

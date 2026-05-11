@@ -1,6 +1,7 @@
-import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { useState } from "react";
-import { Menu, X, Church } from "lucide-react";
+import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { Menu, X, Church, BookOpenCheck, LogOut, User } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const navItems = [
   { to: "/", label: "Início" },
@@ -10,6 +11,7 @@ const navItems = [
   { to: "/transporte", label: "Transporte" },
   { to: "/estudos", label: "Estudos" },
   { to: "/cursos", label: "Cursos" },
+  { to: "/biblia", label: "Bíblia IA" },
   { to: "/servicos", label: "Serviços" },
   { to: "/equipe", label: "Equipe" },
   { to: "/radio", label: "Rádio" },
@@ -17,18 +19,36 @@ const navItems = [
 
 export function Layout() {
   const [open, setOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setUserEmail(data.session?.user.email ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUserEmail(session?.user.email ?? null);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: "/" });
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          <Link to="/" className="flex items-center gap-2 font-semibold">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 gap-4">
+          <Link to="/" className="flex items-center gap-2 font-semibold shrink-0">
             <Church className="h-6 w-6 text-primary" />
-            <span className="text-lg tracking-tight">Igreja Viva</span>
+            <div className="leading-tight">
+              <div className="text-base">IEQ.V Ferraz</div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Campos do Jordão · SP</div>
+            </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1 flex-1 justify-center">
             {navItems.map((item) => {
               const active = path === item.to;
               return (
@@ -47,9 +67,26 @@ export function Layout() {
             })}
           </nav>
 
+          <div className="hidden md:flex items-center gap-2">
+            {userEmail ? (
+              <>
+                <Link to="/meus-estudos" className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-sm hover:bg-accent/20">
+                  <User className="h-4 w-4" /> {userEmail.split("@")[0]}
+                </Link>
+                <button onClick={logout} className="rounded-full p-2 hover:bg-secondary" aria-label="Sair">
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </>
+            ) : (
+              <Link to="/auth" className="rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground">
+                Entrar
+              </Link>
+            )}
+          </div>
+
           <button
             onClick={() => setOpen(!open)}
-            className="lg:hidden rounded-md p-2 hover:bg-secondary"
+            className="xl:hidden rounded-md p-2 hover:bg-secondary"
             aria-label="Menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -57,7 +94,7 @@ export function Layout() {
         </div>
 
         {open && (
-          <div className="lg:hidden border-t border-border/60 bg-background">
+          <div className="xl:hidden border-t border-border/60 bg-background">
             <div className="mx-auto max-w-7xl px-4 py-3 grid grid-cols-2 gap-2">
               {navItems.map((item) => (
                 <Link
@@ -73,6 +110,20 @@ export function Layout() {
                   {item.label}
                 </Link>
               ))}
+              {userEmail ? (
+                <>
+                  <Link to="/meus-estudos" onClick={() => setOpen(false)} className="col-span-2 rounded-lg bg-accent/20 px-3 py-2 text-sm flex items-center gap-2">
+                    <BookOpenCheck className="h-4 w-4" /> Meus estudos
+                  </Link>
+                  <button onClick={() => { logout(); setOpen(false); }} className="col-span-2 rounded-lg border border-border px-3 py-2 text-sm">
+                    Sair ({userEmail})
+                  </button>
+                </>
+              ) : (
+                <Link to="/auth" onClick={() => setOpen(false)} className="col-span-2 rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm text-center font-medium">
+                  Entrar / Cadastrar
+                </Link>
+              )}
             </div>
           </div>
         )}
@@ -87,10 +138,11 @@ export function Layout() {
           <div>
             <div className="flex items-center gap-2 font-semibold mb-2">
               <Church className="h-5 w-5 text-primary" />
-              Igreja Viva
+              IEQ.V Ferraz
             </div>
             <p className="text-muted-foreground">
-              Um lugar de fé, acolhimento e transformação. Venha como você é.
+              Igreja do Evangelho Quadrangular — Vila Ferraz, Campos do Jordão · SP.
+              Um lugar de fé, acolhimento e transformação.
             </p>
           </div>
           <div>
@@ -102,16 +154,15 @@ export function Layout() {
             </ul>
           </div>
           <div>
-            <div className="font-semibold mb-2">Contato</div>
-            <ul className="space-y-1 text-muted-foreground">
-              <li>contato@igrejaviva.com</li>
-              <li>(00) 00000-0000</li>
-              <li>Rua da Paz, 100</li>
-            </ul>
+            <div className="font-semibold mb-2">Endereço</div>
+            <p className="text-muted-foreground">
+              Rua João Rodrigues da Silva, 247<br />
+              Vila Ferraz — Campos do Jordão · SP
+            </p>
           </div>
         </div>
         <div className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Igreja Viva. Todos os direitos reservados.
+          © {new Date().getFullYear()} IEQ.V Ferraz · Campos do Jordão.
         </div>
       </footer>
     </div>

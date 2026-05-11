@@ -14,10 +14,13 @@ import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as ServicosRouteImport } from './routes/servicos'
 import { Route as RadioRouteImport } from './routes/radio'
 import { Route as MuralRouteImport } from './routes/mural'
+import { Route as MeusEstudosRouteImport } from './routes/meus-estudos'
 import { Route as EstudosRouteImport } from './routes/estudos'
 import { Route as EquipeRouteImport } from './routes/equipe'
 import { Route as DoacoesRouteImport } from './routes/doacoes'
 import { Route as CursosRouteImport } from './routes/cursos'
+import { Route as BibliaRouteImport } from './routes/biblia'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EstudosForumRouteImport } from './routes/estudos.forum'
 
@@ -46,6 +49,11 @@ const MuralRoute = MuralRouteImport.update({
   path: '/mural',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeusEstudosRoute = MeusEstudosRouteImport.update({
+  id: '/meus-estudos',
+  path: '/meus-estudos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EstudosRoute = EstudosRouteImport.update({
   id: '/estudos',
   path: '/estudos',
@@ -66,6 +74,16 @@ const CursosRoute = CursosRouteImport.update({
   path: '/cursos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BibliaRoute = BibliaRouteImport.update({
+  id: '/biblia',
+  path: '/biblia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -79,10 +97,13 @@ const EstudosForumRoute = EstudosForumRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/biblia': typeof BibliaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
   '/estudos': typeof EstudosRouteWithChildren
+  '/meus-estudos': typeof MeusEstudosRoute
   '/mural': typeof MuralRoute
   '/radio': typeof RadioRoute
   '/servicos': typeof ServicosRoute
@@ -92,10 +113,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/biblia': typeof BibliaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
   '/estudos': typeof EstudosRouteWithChildren
+  '/meus-estudos': typeof MeusEstudosRoute
   '/mural': typeof MuralRoute
   '/radio': typeof RadioRoute
   '/servicos': typeof ServicosRoute
@@ -106,10 +130,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/biblia': typeof BibliaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
   '/estudos': typeof EstudosRouteWithChildren
+  '/meus-estudos': typeof MeusEstudosRoute
   '/mural': typeof MuralRoute
   '/radio': typeof RadioRoute
   '/servicos': typeof ServicosRoute
@@ -121,10 +148,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
+    | '/biblia'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
     | '/estudos'
+    | '/meus-estudos'
     | '/mural'
     | '/radio'
     | '/servicos'
@@ -134,10 +164,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
+    | '/biblia'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
     | '/estudos'
+    | '/meus-estudos'
     | '/mural'
     | '/radio'
     | '/servicos'
@@ -147,10 +180,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
+    | '/biblia'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
     | '/estudos'
+    | '/meus-estudos'
     | '/mural'
     | '/radio'
     | '/servicos'
@@ -161,10 +197,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  BibliaRoute: typeof BibliaRoute
   CursosRoute: typeof CursosRoute
   DoacoesRoute: typeof DoacoesRoute
   EquipeRoute: typeof EquipeRoute
   EstudosRoute: typeof EstudosRouteWithChildren
+  MeusEstudosRoute: typeof MeusEstudosRoute
   MuralRoute: typeof MuralRoute
   RadioRoute: typeof RadioRoute
   ServicosRoute: typeof ServicosRoute
@@ -209,6 +248,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MuralRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/meus-estudos': {
+      id: '/meus-estudos'
+      path: '/meus-estudos'
+      fullPath: '/meus-estudos'
+      preLoaderRoute: typeof MeusEstudosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/estudos': {
       id: '/estudos'
       path: '/estudos'
@@ -235,6 +281,20 @@ declare module '@tanstack/react-router' {
       path: '/cursos'
       fullPath: '/cursos'
       preLoaderRoute: typeof CursosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblia': {
+      id: '/biblia'
+      path: '/biblia'
+      fullPath: '/biblia'
+      preLoaderRoute: typeof BibliaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -267,10 +327,13 @@ const EstudosRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  BibliaRoute: BibliaRoute,
   CursosRoute: CursosRoute,
   DoacoesRoute: DoacoesRoute,
   EquipeRoute: EquipeRoute,
   EstudosRoute: EstudosRouteWithChildren,
+  MeusEstudosRoute: MeusEstudosRoute,
   MuralRoute: MuralRoute,
   RadioRoute: RadioRoute,
   ServicosRoute: ServicosRoute,
