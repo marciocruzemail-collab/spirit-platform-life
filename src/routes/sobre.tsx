@@ -1,12 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/sobre")({
   component: Sobre,
-  head: () => ({ meta: [{ title: "Sobre — Igreja Viva" }, { name: "description", content: "Nossa história, missão e dias de culto." }] }),
+  head: () => ({ meta: [{ title: "Sobre — IEQ.V Ferraz" }, { name: "description", content: "Nossa história, missão e dias de culto." }] }),
 });
 
+type ServiceTime = { day: string; time: string; label: string };
+
 function Sobre() {
+  const [times, setTimes] = useState<ServiceTime[]>([]);
+
+  useEffect(() => {
+    supabase.from("church_settings").select("value").eq("key", "service_times").maybeSingle()
+      .then(({ data }) => { if (data?.value) setTimes(data.value as ServiceTime[]); });
+  }, []);
+
   return (
     <>
       <PageHeader eyebrow="IEQ.V Ferraz" title="Nossa história" description="Igreja do Evangelho Quadrangular — Vila Ferraz, Campos do Jordão · SP. Servindo, acolhendo e transformando vidas pela graça de Deus." />
@@ -20,12 +31,8 @@ function Sobre() {
           <strong>Endereço:</strong> Rua João Rodrigues da Silva, 247 — Vila Ferraz, Campos do Jordão · SP
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {[
-            { day: "Quarta", time: "19h30", label: "Estudo bíblico" },
-            { day: "Sexta", time: "20h", label: "Culto de oração" },
-            { day: "Domingo", time: "10h e 18h", label: "Culto da família" },
-          ].map((c) => (
-            <div key={c.day} className="rounded-2xl bg-card border border-border p-6">
+          {times.map((c, i) => (
+            <div key={i} className="rounded-2xl bg-card border border-border p-6">
               <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold">{c.day}</div>
               <div className="mt-2 text-2xl font-bold">{c.time}</div>
               <div className="text-muted-foreground">{c.label}</div>
