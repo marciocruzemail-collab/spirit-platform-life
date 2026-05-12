@@ -84,7 +84,7 @@ dist/                     # Build gerado (gitignored)
 ## 🛠️ Stack Tecnológico
 
 | Camada | Tecnologia |
-|--------|-----------|
+|--------|----------|
 | **Framework** | TanStack Start + React 19 |
 | **Roteamento** | TanStack Router |
 | **UI** | Radix UI + Tailwind CSS |
