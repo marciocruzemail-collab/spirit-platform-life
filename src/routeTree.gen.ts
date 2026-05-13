@@ -19,6 +19,7 @@ import { Route as EstudosRouteImport } from './routes/estudos'
 import { Route as EquipeRouteImport } from './routes/equipe'
 import { Route as DoacoesRouteImport } from './routes/doacoes'
 import { Route as CursosRouteImport } from './routes/cursos'
+import { Route as BibliotecaRouteImport } from './routes/biblioteca'
 import { Route as BibliaRouteImport } from './routes/biblia'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -76,6 +77,11 @@ const CursosRoute = CursosRouteImport.update({
   path: '/cursos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BibliotecaRoute = BibliotecaRouteImport.update({
+  id: '/biblioteca',
+  path: '/biblioteca',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BibliaRoute = BibliaRouteImport.update({
   id: '/biblia',
   path: '/biblia',
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/biblia': typeof BibliaRoute
+  '/biblioteca': typeof BibliotecaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/biblia': typeof BibliaRoute
+  '/biblioteca': typeof BibliotecaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/biblia': typeof BibliaRoute
+  '/biblioteca': typeof BibliotecaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/biblia'
+    | '/biblioteca'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/biblia'
+    | '/biblioteca'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/biblia'
+    | '/biblioteca'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
@@ -225,6 +237,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   BibliaRoute: typeof BibliaRoute
+  BibliotecaRoute: typeof BibliotecaRoute
   CursosRoute: typeof CursosRoute
   DoacoesRoute: typeof DoacoesRoute
   EquipeRoute: typeof EquipeRoute
@@ -309,6 +322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CursosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/biblioteca': {
+      id: '/biblioteca'
+      path: '/biblioteca'
+      fullPath: '/biblioteca'
+      preLoaderRoute: typeof BibliotecaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/biblia': {
       id: '/biblia'
       path: '/biblia'
@@ -371,6 +391,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   BibliaRoute: BibliaRoute,
+  BibliotecaRoute: BibliotecaRoute,
   CursosRoute: CursosRoute,
   DoacoesRoute: DoacoesRoute,
   EquipeRoute: EquipeRoute,
