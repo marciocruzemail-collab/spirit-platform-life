@@ -46,10 +46,12 @@ function Admin() {
 
   return (
     <>
-      <PageHeader eyebrow="Administração" title="Painel" description="Gerencie horários de culto e fotos do mural." />
+      <PageHeader eyebrow="Administração" title="Painel" description="Gerencie horários, fotos, aconselhamentos e estudos." />
       <div className="mx-auto max-w-5xl px-4 py-10 space-y-12">
         <ServiceTimesEditor />
         <PhotoManager />
+        <CounselingManager />
+        <StudiesManager />
       </div>
     </>
   );
