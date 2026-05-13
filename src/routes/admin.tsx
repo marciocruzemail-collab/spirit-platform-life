@@ -182,3 +182,180 @@ function PhotoManager() {
     </section>
   );
 }
+
+// ===== Counseling Manager =====
+type CSession = { id: string; anonymous_name: string; topic: string; status: string; created_at: string };
+type CMsg = { id: string; sender: "visitor" | "counselor"; content: string; created_at: string };
+
+function CounselingManager() {
+  const [sessions, setSessions] = useState<CSession[]>([]);
+  const [active, setActive] = useState<CSession | null>(null);
+
+  const load = async () => {
+    const { data } = await supabase.from("counseling_sessions").select("*").order("created_at", { ascending: false });
+    setSessions((data ?? []) as CSession[]);
+  };
+  useEffect(() => { load(); }, []);
+
+  return (
+    <section className="rounded-2xl border border-border bg-card p-6">
+      <h2 className="text-xl font-semibold mb-4">Aconselhamentos</h2>
+      <div className="grid md:grid-cols-[260px_1fr] gap-4">
+        <div className="space-y-2 max-h-[500px] overflow-y-auto">
+          {sessions.length === 0 && <p className="text-sm text-muted-foreground">Nenhum atendimento ainda.</p>}
+          {sessions.map(s => (
+            <button key={s.id} onClick={() => setActive(s)}
+                    className={`w-full text-left rounded-lg border border-border p-3 text-sm hover:bg-secondary ${active?.id === s.id ? "bg-secondary" : ""}`}>
+              <div className="font-semibold truncate">{s.anonymous_name}</div>
+              <div className="text-xs text-muted-foreground truncate">{s.topic}</div>
+              <div className="text-[10px] text-muted-foreground mt-1">{new Date(s.created_at).toLocaleString("pt-BR")}</div>
+            </button>
+          ))}
+        </div>
+        <div className="rounded-xl border border-border bg-background min-h-[400px]">
+          {active ? <CounselingThread session={active} onClosed={load} /> : (
+            <p className="p-6 text-sm text-muted-foreground">Selecione um atendimento.</p>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CounselingThread({ session, onClosed }: { session: CSession; onClosed: () => void }) {
+  const [msgs, setMsgs] = useState<CMsg[]>([]);
+  const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    supabase.from("counseling_messages").select("*").eq("session_id", session.id).order("created_at")
+      .then(({ data }) => setMsgs((data ?? []) as CMsg[]));
+    const ch = supabase.channel(`adm-${session.id}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "counseling_messages", filter: `session_id=eq.${session.id}` },
+        (p) => setMsgs(m => [...m, p.new as CMsg])).subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [session.id]);
+
+  const send = async () => {
+    if (!text.trim()) return;
+    setSending(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error } = await supabase.from("counseling_messages")
+      .insert({ session_id: session.id, sender: "counselor", content: text.trim(), sender_user_id: user?.id });
+    setSending(false);
+    if (error) { toast.error(error.message); return; }
+    setText("");
+  };
+
+  const close = async () => {
+    if (!confirm("Encerrar este atendimento?")) return;
+    await supabase.from("counseling_sessions").update({ status: "closed" }).eq("id", session.id);
+    toast.success("Atendimento encerrado");
+    onClosed();
+  };
+
+  return (
+    <div className="flex flex-col h-[500px]">
+      <div className="border-b border-border px-4 py-2 flex items-center justify-between">
+        <div className="text-sm">
+          <strong>{session.anonymous_name}</strong>
+          <span className="ml-2 text-xs text-muted-foreground">· {session.status}</span>
+        </div>
+        <button onClick={close} className="text-xs text-destructive hover:underline">Encerrar</button>
+      </div>
+      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+        {msgs.map(m => (
+          <div key={m.id} className={`flex ${m.sender === "counselor" ? "justify-end" : "justify-start"}`}>
+            <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap ${
+              m.sender === "counselor" ? "bg-primary text-primary-foreground" : "bg-secondary"
+            }`}>{m.content}</div>
+          </div>
+        ))}
+      </div>
+      <div className="border-t border-border p-2 flex gap-2">
+        <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === "Enter" && send()}
+               placeholder="Resposta do conselheiro…"
+               className="flex-1 rounded-full border border-border bg-background px-3 py-2 text-sm" />
+        <button onClick={send} disabled={sending} className="rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-50">
+          Enviar
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ===== Studies (PDF) Manager =====
+type Study = { id: string; title: string; description: string | null; category: string; file_path: string };
+
+function StudiesManager() {
+  const [studies, setStudies] = useState<Study[]>([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("geral");
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+
+  const load = async () => {
+    const { data } = await supabase.from("pdf_studies").select("*").order("created_at", { ascending: false });
+    setStudies((data ?? []) as Study[]);
+  };
+  useEffect(() => { load(); }, []);
+
+  const upload = async () => {
+    if (!file || !title) { toast.error("Arquivo e título são obrigatórios"); return; }
+    if (file.type !== "application/pdf") { toast.error("Envie um arquivo PDF"); return; }
+    setUploading(true);
+    const path = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+    const { error: upErr } = await supabase.storage.from("studies").upload(path, file, { contentType: "application/pdf" });
+    if (upErr) { toast.error(upErr.message); setUploading(false); return; }
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error: insErr } = await supabase.from("pdf_studies")
+      .insert({ title, description, category, file_path: path, created_by: user?.id });
+    setUploading(false);
+    if (insErr) { toast.error(insErr.message); return; }
+    toast.success("Estudo publicado!");
+    setTitle(""); setDescription(""); setFile(null);
+    load();
+  };
+
+  const remove = async (s: Study) => {
+    if (!confirm("Excluir este estudo?")) return;
+    await supabase.storage.from("studies").remove([s.file_path]);
+    await supabase.from("pdf_studies").delete().eq("id", s.id);
+    toast.success("Estudo removido");
+    load();
+  };
+
+  return (
+    <section className="rounded-2xl border border-border bg-card p-6">
+      <h2 className="text-xl font-semibold mb-4">Estudos em PDF</h2>
+      <div className="rounded-xl bg-secondary/40 p-4 space-y-3">
+        <div className="grid sm:grid-cols-2 gap-3">
+          <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Título *" className="rounded-md border border-border bg-background px-3 py-2 text-sm" />
+          <input value={category} onChange={e => setCategory(e.target.value)} placeholder="Categoria (ex: doutrina)" className="rounded-md border border-border bg-background px-3 py-2 text-sm" />
+        </div>
+        <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Descrição" rows={2} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm" />
+        <input type="file" accept="application/pdf" onChange={e => setFile(e.target.files?.[0] ?? null)} className="text-sm" />
+        <button onClick={upload} disabled={uploading} className="rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground flex items-center gap-2 disabled:opacity-60">
+          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} Publicar PDF
+        </button>
+      </div>
+
+      <ul className="mt-6 divide-y divide-border">
+        {studies.map(s => (
+          <li key={s.id} className="py-3 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-xs uppercase text-accent font-semibold">{s.category}</div>
+              <div className="font-semibold text-sm truncate">{s.title}</div>
+              {s.description && <p className="text-xs text-muted-foreground truncate">{s.description}</p>}
+            </div>
+            <button onClick={() => remove(s)} className="text-xs text-destructive hover:underline flex items-center gap-1 shrink-0">
+              <Trash2 className="h-3 w-3" /> Excluir
+            </button>
+          </li>
+        ))}
+        {studies.length === 0 && <p className="text-sm text-muted-foreground py-4">Nenhum PDF publicado ainda.</p>}
+      </ul>
+    </section>
+  );
+}
