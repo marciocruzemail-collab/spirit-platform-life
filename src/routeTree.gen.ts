@@ -19,9 +19,11 @@ import { Route as EstudosRouteImport } from './routes/estudos'
 import { Route as EquipeRouteImport } from './routes/equipe'
 import { Route as DoacoesRouteImport } from './routes/doacoes'
 import { Route as CursosRouteImport } from './routes/cursos'
+import { Route as BibliotecaRouteImport } from './routes/biblioteca'
 import { Route as BibliaRouteImport } from './routes/biblia'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AconselhamentoRouteImport } from './routes/aconselhamento'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EstudosForumRouteImport } from './routes/estudos.forum'
 
@@ -75,6 +77,11 @@ const CursosRoute = CursosRouteImport.update({
   path: '/cursos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BibliotecaRoute = BibliotecaRouteImport.update({
+  id: '/biblioteca',
+  path: '/biblioteca',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BibliaRoute = BibliaRouteImport.update({
   id: '/biblia',
   path: '/biblia',
@@ -90,6 +97,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AconselhamentoRoute = AconselhamentoRouteImport.update({
+  id: '/aconselhamento',
+  path: '/aconselhamento',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -103,9 +115,11 @@ const EstudosForumRoute = EstudosForumRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/aconselhamento': typeof AconselhamentoRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/biblia': typeof BibliaRoute
+  '/biblioteca': typeof BibliotecaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
@@ -120,9 +134,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/aconselhamento': typeof AconselhamentoRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/biblia': typeof BibliaRoute
+  '/biblioteca': typeof BibliotecaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
@@ -138,9 +154,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/aconselhamento': typeof AconselhamentoRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/biblia': typeof BibliaRoute
+  '/biblioteca': typeof BibliotecaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
@@ -157,9 +175,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/aconselhamento'
     | '/admin'
     | '/auth'
     | '/biblia'
+    | '/biblioteca'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
@@ -174,9 +194,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/aconselhamento'
     | '/admin'
     | '/auth'
     | '/biblia'
+    | '/biblioteca'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
@@ -191,9 +213,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/aconselhamento'
     | '/admin'
     | '/auth'
     | '/biblia'
+    | '/biblioteca'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
@@ -209,9 +233,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AconselhamentoRoute: typeof AconselhamentoRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   BibliaRoute: typeof BibliaRoute
+  BibliotecaRoute: typeof BibliotecaRoute
   CursosRoute: typeof CursosRoute
   DoacoesRoute: typeof DoacoesRoute
   EquipeRoute: typeof EquipeRoute
@@ -296,6 +322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CursosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/biblioteca': {
+      id: '/biblioteca'
+      path: '/biblioteca'
+      fullPath: '/biblioteca'
+      preLoaderRoute: typeof BibliotecaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/biblia': {
       id: '/biblia'
       path: '/biblia'
@@ -315,6 +348,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aconselhamento': {
+      id: '/aconselhamento'
+      path: '/aconselhamento'
+      fullPath: '/aconselhamento'
+      preLoaderRoute: typeof AconselhamentoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -347,9 +387,11 @@ const EstudosRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AconselhamentoRoute: AconselhamentoRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   BibliaRoute: BibliaRoute,
+  BibliotecaRoute: BibliotecaRoute,
   CursosRoute: CursosRoute,
   DoacoesRoute: DoacoesRoute,
   EquipeRoute: EquipeRoute,

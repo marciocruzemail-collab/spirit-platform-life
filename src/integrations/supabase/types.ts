@@ -62,6 +62,77 @@ export type Database = {
         }
         Relationships: []
       }
+      counseling_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          sender: string
+          sender_user_id: string | null
+          session_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          sender: string
+          sender_user_id?: string | null
+          session_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          sender?: string
+          sender_user_id?: string | null
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "counseling_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "counseling_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      counseling_sessions: {
+        Row: {
+          access_token: string
+          anonymous_name: string
+          created_at: string
+          created_by: string | null
+          id: string
+          status: string
+          terms_accepted: boolean
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string
+          anonymous_name: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          status?: string
+          terms_accepted?: boolean
+          topic: string
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string
+          anonymous_name?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          status?: string
+          terms_accepted?: boolean
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mural_photos: {
         Row: {
           category: string
@@ -93,6 +164,39 @@ export type Database = {
           display_order?: number
           id?: string
           image_path?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pdf_studies: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          file_path: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          file_path: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          file_path?: string
+          id?: string
           title?: string
           updated_at?: string
         }
