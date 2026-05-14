@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdmin } from "@/hooks/use-admin";
-import { Loader2, Trash2, Upload, Save, ShieldAlert } from "lucide-react";
+import { Loader2, Trash2, Upload, Save, ShieldAlert, UserPlus, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({
@@ -52,6 +52,7 @@ function Admin() {
         <PhotoManager />
         <CounselingManager />
         <StudiesManager />
+        <AdminsManager />
       </div>
     </>
   );
@@ -238,6 +239,20 @@ function CounselingThread({ session, onClosed }: { session: CSession; onClosed: 
 
   const send = async () => {
     if (!text.trim()) return;
+    // Filtro de segurança: o conselheiro também não pode passar contatos / redes sociais
+    const FORBIDDEN = [
+      { re: /(\+?\d[\d\s().-]{7,}\d)/, reason: "número de telefone" },
+      { re: /[\w.+-]+@[\w-]+\.[\w.-]+/i, reason: "endereço de e-mail" },
+      { re: /\b(?:https?:\/\/|www\.)\S+/i, reason: "link/URL" },
+      { re: /\b(?:whatsapp|wpp|whats|zap|telegram|signal|instagram|insta|facebook|tiktok|twitter|snap)\b/i, reason: "rede social/mensageiro" },
+      { re: /@[a-z0-9._]{3,}/i, reason: "@usuário" },
+    ];
+    for (const f of FORBIDDEN) {
+      if (f.re.test(text)) {
+        toast.error(`Mensagem bloqueada: contém ${f.reason}. Por política, atendimento somente por texto neste canal.`);
+        return;
+      }
+    }
     setSending(true);
     const { data: { user } } = await supabase.auth.getUser();
     const { error } = await supabase.from("counseling_messages")
@@ -355,6 +370,89 @@ function StudiesManager() {
           </li>
         ))}
         {studies.length === 0 && <p className="text-sm text-muted-foreground py-4">Nenhum PDF publicado ainda.</p>}
+      </ul>
+    </section>
+  );
+}
+
+// ===== Admins Manager =====
+type AdminRow = { user_id: string; email: string; created_at: string };
+
+function AdminsManager() {
+  const [admins, setAdmins] = useState<AdminRow[]>([]);
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const load = async () => {
+    const { data, error } = await supabase.rpc("list_admins");
+    if (error) { toast.error(error.message); return; }
+    setAdmins((data ?? []) as AdminRow[]);
+  };
+  useEffect(() => { load(); }, []);
+
+  const grant = async () => {
+    const e = email.trim().toLowerCase();
+    if (!e || !/^[\w.+-]+@[\w-]+\.[\w.-]+$/.test(e)) { toast.error("E-mail inválido"); return; }
+    setBusy(true);
+    const { data, error } = await supabase.rpc("grant_admin_by_email", { _email: e });
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    const res = data as { ok: boolean; error?: string };
+    if (!res?.ok) { toast.error(res?.error ?? "Erro"); return; }
+    toast.success("Administrador adicionado!");
+    setEmail("");
+    load();
+  };
+
+  const revoke = async (mail: string) => {
+    if (!confirm(`Remover privilégio de admin de ${mail}?`)) return;
+    const { data, error } = await supabase.rpc("revoke_admin_by_email", { _email: mail });
+    if (error) { toast.error(error.message); return; }
+    const res = data as { ok: boolean; error?: string };
+    if (!res?.ok) { toast.error(res?.error ?? "Erro"); return; }
+    toast.success("Privilégio removido");
+    load();
+  };
+
+  return (
+    <section className="rounded-2xl border border-border bg-card p-6">
+      <h2 className="text-xl font-semibold mb-2 flex items-center gap-2"><ShieldCheck className="h-5 w-5 text-primary" /> Administradores</h2>
+      <p className="text-sm text-muted-foreground mb-4">
+        Para promover alguém, peça primeiro que essa pessoa <strong>crie a conta no site</strong>. Depois informe o e-mail dela aqui.
+      </p>
+
+      <div className="rounded-xl bg-secondary/40 p-4 flex flex-col sm:flex-row gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="email-do-novo-admin@exemplo.com"
+          className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm"
+        />
+        <button onClick={grant} disabled={busy}
+                className="rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground flex items-center gap-2 disabled:opacity-60">
+          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />} Conceder admin
+        </button>
+      </div>
+
+      <ul className="mt-6 divide-y divide-border">
+        {admins.map(a => (
+          <li key={a.user_id} className="py-3 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="font-medium text-sm truncate">{a.email}</div>
+              <div className="text-xs text-muted-foreground">desde {new Date(a.created_at).toLocaleDateString("pt-BR")}</div>
+            </div>
+            {a.email !== "marciocruzemail@gmail.com" && (
+              <button onClick={() => revoke(a.email)} className="text-xs text-destructive hover:underline flex items-center gap-1 shrink-0">
+                <Trash2 className="h-3 w-3" /> Remover
+              </button>
+            )}
+            {a.email === "marciocruzemail@gmail.com" && (
+              <span className="text-[10px] uppercase tracking-wider text-accent">principal</span>
+            )}
+          </li>
+        ))}
+        {admins.length === 0 && <p className="text-sm text-muted-foreground py-4">Nenhum administrador listado.</p>}
       </ul>
     </section>
   );
