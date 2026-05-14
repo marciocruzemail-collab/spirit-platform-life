@@ -142,6 +142,7 @@ export type Database = {
           display_order: number
           id: string
           image_path: string
+          media_type: string
           title: string
           updated_at: string
         }
@@ -153,6 +154,7 @@ export type Database = {
           display_order?: number
           id?: string
           image_path: string
+          media_type?: string
           title: string
           updated_at?: string
         }
@@ -164,6 +166,7 @@ export type Database = {
           display_order?: number
           id?: string
           image_path?: string
+          media_type?: string
           title?: string
           updated_at?: string
         }
