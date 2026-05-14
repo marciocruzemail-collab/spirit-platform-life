@@ -17,6 +17,7 @@ type Photo = {
   description: string | null;
   category: string;
   image_path: string;
+  media_type: "image" | "video";
   created_at: string;
 };
 
@@ -119,33 +120,37 @@ function PhotoManager() {
   useEffect(() => { load(); }, []);
 
   const upload = async () => {
-    if (!file || !title) { toast.error("Foto e título são obrigatórios"); return; }
+    if (!file || !title) { toast.error("Arquivo e título são obrigatórios"); return; }
+    const isVideo = file.type.startsWith("video/");
+    const isImage = file.type.startsWith("image/");
+    if (!isVideo && !isImage) { toast.error("Envie uma imagem ou vídeo"); return; }
+    if (file.size > 100 * 1024 * 1024) { toast.error("Arquivo muito grande (máx 100MB)"); return; }
     setUploading(true);
     const ext = file.name.split(".").pop();
     const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const { error: upErr } = await supabase.storage.from("mural").upload(path, file);
+    const { error: upErr } = await supabase.storage.from("mural").upload(path, file, { contentType: file.type });
     if (upErr) { toast.error(upErr.message); setUploading(false); return; }
     const { data: { user } } = await supabase.auth.getUser();
     const { error: insErr } = await supabase.from("mural_photos")
-      .insert({ title, description, category, image_path: path, created_by: user?.id });
+      .insert({ title, description, category, image_path: path, media_type: isVideo ? "video" : "image", created_by: user?.id });
     setUploading(false);
     if (insErr) { toast.error(insErr.message); return; }
-    toast.success("Foto publicada!");
+    toast.success(isVideo ? "Vídeo publicado!" : "Foto publicada!");
     setTitle(""); setDescription(""); setFile(null);
     load();
   };
 
   const remove = async (p: Photo) => {
-    if (!confirm("Excluir esta foto?")) return;
+    if (!confirm("Excluir esta mídia?")) return;
     await supabase.storage.from("mural").remove([p.image_path]);
     await supabase.from("mural_photos").delete().eq("id", p.id);
-    toast.success("Foto removida");
+    toast.success("Removido");
     load();
   };
 
   return (
     <section className="rounded-2xl border border-border bg-card p-6">
-      <h2 className="text-xl font-semibold mb-4">Fotos do mural</h2>
+      <h2 className="text-xl font-semibold mb-4">Fotos e vídeos do mural</h2>
 
       <div className="rounded-xl bg-secondary/40 p-4 space-y-3">
         <div className="grid sm:grid-cols-2 gap-3">
@@ -155,9 +160,10 @@ function PhotoManager() {
           </select>
         </div>
         <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Descrição (opcional)" rows={2} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm" />
-        <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] ?? null)} className="text-sm" />
+        <input type="file" accept="image/*,video/*" onChange={e => setFile(e.target.files?.[0] ?? null)} className="text-sm" />
+        <p className="text-xs text-muted-foreground">Aceita imagens e vídeos (até 100MB).</p>
         <button onClick={upload} disabled={uploading} className="rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground flex items-center gap-2 disabled:opacity-60">
-          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} Publicar foto
+          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} Publicar
         </button>
       </div>
 
@@ -166,9 +172,13 @@ function PhotoManager() {
           const url = supabase.storage.from("mural").getPublicUrl(p.image_path).data.publicUrl;
           return (
             <div key={p.id} className="rounded-xl overflow-hidden border border-border bg-background">
-              <img src={url} alt={p.title} className="aspect-[4/3] w-full object-cover" />
+              {p.media_type === "video" ? (
+                <video src={url} controls className="aspect-[4/3] w-full object-cover bg-black" />
+              ) : (
+                <img src={url} alt={p.title} className="aspect-[4/3] w-full object-cover" />
+              )}
               <div className="p-3">
-                <div className="text-xs uppercase tracking-wider text-accent font-semibold">{p.category}</div>
+                <div className="text-xs uppercase tracking-wider text-accent font-semibold">{p.category} · {p.media_type === "video" ? "vídeo" : "foto"}</div>
                 <div className="font-semibold text-sm">{p.title}</div>
                 {p.description && <p className="text-xs text-muted-foreground mt-1">{p.description}</p>}
                 <button onClick={() => remove(p)} className="mt-2 text-xs text-destructive flex items-center gap-1 hover:underline">
@@ -178,7 +188,7 @@ function PhotoManager() {
             </div>
           );
         })}
-        {photos.length === 0 && <p className="text-sm text-muted-foreground col-span-full">Nenhuma foto ainda. Publique a primeira acima.</p>}
+        {photos.length === 0 && <p className="text-sm text-muted-foreground col-span-full">Nenhuma mídia ainda. Publique a primeira acima.</p>}
       </div>
     </section>
   );
