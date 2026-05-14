@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdmin } from "@/hooks/use-admin";
-import { Loader2, Trash2, Upload, Save, ShieldAlert } from "lucide-react";
+import { Loader2, Trash2, Upload, Save, ShieldAlert, UserPlus, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({
@@ -52,6 +52,7 @@ function Admin() {
         <PhotoManager />
         <CounselingManager />
         <StudiesManager />
+        <AdminsManager />
       </div>
     </>
   );
@@ -238,6 +239,20 @@ function CounselingThread({ session, onClosed }: { session: CSession; onClosed: 
 
   const send = async () => {
     if (!text.trim()) return;
+    // Filtro de segurança: o conselheiro também não pode passar contatos / redes sociais
+    const FORBIDDEN = [
+      { re: /(\+?\d[\d\s().-]{7,}\d)/, reason: "número de telefone" },
+      { re: /[\w.+-]+@[\w-]+\.[\w.-]+/i, reason: "endereço de e-mail" },
+      { re: /\b(?:https?:\/\/|www\.)\S+/i, reason: "link/URL" },
+      { re: /\b(?:whatsapp|wpp|whats|zap|telegram|signal|instagram|insta|facebook|tiktok|twitter|snap)\b/i, reason: "rede social/mensageiro" },
+      { re: /@[a-z0-9._]{3,}/i, reason: "@usuário" },
+    ];
+    for (const f of FORBIDDEN) {
+      if (f.re.test(text)) {
+        toast.error(`Mensagem bloqueada: contém ${f.reason}. Por política, atendimento somente por texto neste canal.`);
+        return;
+      }
+    }
     setSending(true);
     const { data: { user } } = await supabase.auth.getUser();
     const { error } = await supabase.from("counseling_messages")
