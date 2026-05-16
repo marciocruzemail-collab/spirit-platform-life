@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
 });
 
 const highlights = [
-  { to: "/biblia", icon: BookOpen, title: "Enciclopédia Bíblica IA", desc: "Estude a Bíblia com auxílio inteligente e salve seus estudos." },
+  { to: "/aconselhamento", icon: MessageCircle, title: "Aconselhamento", desc: "Chat anônimo e seguro com nossos conselheiros." },
   { to: "/doacoes", icon: Heart, title: "Doações", desc: "Doe ou receba alimentos com carinho." },
   { to: "/transporte", icon: Bus, title: "Transporte gratuito", desc: "Nossa Kombi passa no seu bairro." },
   { to: "/estudos", icon: BookOpenIcon, title: "Estudos bíblicos", desc: "Infantil, Teen, Crazy e Full." },
