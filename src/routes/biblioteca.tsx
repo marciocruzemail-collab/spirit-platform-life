@@ -53,7 +53,7 @@ function Library() {
               <Lock className="h-5 w-5 text-primary mt-0.5" />
               <div>
                 <div className="font-semibold">Cadastre-se para baixar</div>
-                <p className="text-sm text-muted-foreground">É rápido e gratuito. Você também ganha acesso aos seus estudos da Bíblia IA.</p>
+                <p className="text-sm text-muted-foreground">É rápido e gratuito. É rápido e gratuito.</p>
               </div>
             </div>
             <Link to="/auth" className="rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground shrink-0">Criar conta / Entrar</Link>

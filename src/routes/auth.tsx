@@ -18,7 +18,7 @@ function Auth() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/biblia" });
+      if (data.session) navigate({ to: "/biblioteca" });
     });
   }, [navigate]);
 
@@ -39,7 +39,7 @@ function Auth() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/biblia" });
+        navigate({ to: "/biblioteca" });
       }
     } catch (err: any) {
       setError(err.message ?? "Erro ao autenticar");
