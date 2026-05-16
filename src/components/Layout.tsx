@@ -79,9 +79,9 @@ export function Layout() {
                     <Shield className="h-4 w-4" /> Admin
                   </Link>
                 )}
-                <Link to="/meus-estudos" className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-sm hover:bg-accent/20">
+                <span className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-sm">
                   <User className="h-4 w-4" /> {userEmail.split("@")[0]}
-                </Link>
+                </span>
                 <button onClick={logout} className="rounded-full p-2 hover:bg-secondary" aria-label="Sair">
                   <LogOut className="h-4 w-4" />
                 </button>
