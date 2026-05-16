@@ -26,6 +26,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AconselhamentoRouteImport } from './routes/aconselhamento'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EstudosForumRouteImport } from './routes/estudos.forum'
+import { Route as ApiBibliaAiRouteImport } from './routes/api/biblia-ai'
 
 const TransporteRoute = TransporteRouteImport.update({
   id: '/transporte',
@@ -112,6 +113,11 @@ const EstudosForumRoute = EstudosForumRouteImport.update({
   path: '/forum',
   getParentRoute: () => EstudosRoute,
 } as any)
+const ApiBibliaAiRoute = ApiBibliaAiRouteImport.update({
+  id: '/api/biblia-ai',
+  path: '/api/biblia-ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/servicos': typeof ServicosRoute
   '/sobre': typeof SobreRoute
   '/transporte': typeof TransporteRoute
+  '/api/biblia-ai': typeof ApiBibliaAiRoute
   '/estudos/forum': typeof EstudosForumRoute
 }
 export interface FileRoutesByTo {
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/servicos': typeof ServicosRoute
   '/sobre': typeof SobreRoute
   '/transporte': typeof TransporteRoute
+  '/api/biblia-ai': typeof ApiBibliaAiRoute
   '/estudos/forum': typeof EstudosForumRoute
 }
 export interface FileRoutesById {
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/servicos': typeof ServicosRoute
   '/sobre': typeof SobreRoute
   '/transporte': typeof TransporteRoute
+  '/api/biblia-ai': typeof ApiBibliaAiRoute
   '/estudos/forum': typeof EstudosForumRoute
 }
 export interface FileRouteTypes {
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/sobre'
     | '/transporte'
+    | '/api/biblia-ai'
     | '/estudos/forum'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/sobre'
     | '/transporte'
+    | '/api/biblia-ai'
     | '/estudos/forum'
   id:
     | '__root__'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/sobre'
     | '/transporte'
+    | '/api/biblia-ai'
     | '/estudos/forum'
   fileRoutesById: FileRoutesById
 }
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   ServicosRoute: typeof ServicosRoute
   SobreRoute: typeof SobreRoute
   TransporteRoute: typeof TransporteRoute
+  ApiBibliaAiRoute: typeof ApiBibliaAiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -371,6 +384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EstudosForumRouteImport
       parentRoute: typeof EstudosRoute
     }
+    '/api/biblia-ai': {
+      id: '/api/biblia-ai'
+      path: '/api/biblia-ai'
+      fullPath: '/api/biblia-ai'
+      preLoaderRoute: typeof ApiBibliaAiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -402,6 +422,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicosRoute: ServicosRoute,
   SobreRoute: SobreRoute,
   TransporteRoute: TransporteRoute,
+  ApiBibliaAiRoute: ApiBibliaAiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
