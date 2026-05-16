@@ -14,19 +14,16 @@ import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as ServicosRouteImport } from './routes/servicos'
 import { Route as RadioRouteImport } from './routes/radio'
 import { Route as MuralRouteImport } from './routes/mural'
-import { Route as MeusEstudosRouteImport } from './routes/meus-estudos'
 import { Route as EstudosRouteImport } from './routes/estudos'
 import { Route as EquipeRouteImport } from './routes/equipe'
 import { Route as DoacoesRouteImport } from './routes/doacoes'
 import { Route as CursosRouteImport } from './routes/cursos'
 import { Route as BibliotecaRouteImport } from './routes/biblioteca'
-import { Route as BibliaRouteImport } from './routes/biblia'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AconselhamentoRouteImport } from './routes/aconselhamento'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EstudosForumRouteImport } from './routes/estudos.forum'
-import { Route as ApiBibliaAiRouteImport } from './routes/api/biblia-ai'
 
 const TransporteRoute = TransporteRouteImport.update({
   id: '/transporte',
@@ -51,11 +48,6 @@ const RadioRoute = RadioRouteImport.update({
 const MuralRoute = MuralRouteImport.update({
   id: '/mural',
   path: '/mural',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeusEstudosRoute = MeusEstudosRouteImport.update({
-  id: '/meus-estudos',
-  path: '/meus-estudos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EstudosRoute = EstudosRouteImport.update({
@@ -83,11 +75,6 @@ const BibliotecaRoute = BibliotecaRouteImport.update({
   path: '/biblioteca',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BibliaRoute = BibliaRouteImport.update({
-  id: '/biblia',
-  path: '/biblia',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -113,30 +100,22 @@ const EstudosForumRoute = EstudosForumRouteImport.update({
   path: '/forum',
   getParentRoute: () => EstudosRoute,
 } as any)
-const ApiBibliaAiRoute = ApiBibliaAiRouteImport.update({
-  id: '/api/biblia-ai',
-  path: '/api/biblia-ai',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/aconselhamento': typeof AconselhamentoRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
-  '/biblia': typeof BibliaRoute
   '/biblioteca': typeof BibliotecaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
   '/estudos': typeof EstudosRouteWithChildren
-  '/meus-estudos': typeof MeusEstudosRoute
   '/mural': typeof MuralRoute
   '/radio': typeof RadioRoute
   '/servicos': typeof ServicosRoute
   '/sobre': typeof SobreRoute
   '/transporte': typeof TransporteRoute
-  '/api/biblia-ai': typeof ApiBibliaAiRoute
   '/estudos/forum': typeof EstudosForumRoute
 }
 export interface FileRoutesByTo {
@@ -144,19 +123,16 @@ export interface FileRoutesByTo {
   '/aconselhamento': typeof AconselhamentoRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
-  '/biblia': typeof BibliaRoute
   '/biblioteca': typeof BibliotecaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
   '/estudos': typeof EstudosRouteWithChildren
-  '/meus-estudos': typeof MeusEstudosRoute
   '/mural': typeof MuralRoute
   '/radio': typeof RadioRoute
   '/servicos': typeof ServicosRoute
   '/sobre': typeof SobreRoute
   '/transporte': typeof TransporteRoute
-  '/api/biblia-ai': typeof ApiBibliaAiRoute
   '/estudos/forum': typeof EstudosForumRoute
 }
 export interface FileRoutesById {
@@ -165,19 +141,16 @@ export interface FileRoutesById {
   '/aconselhamento': typeof AconselhamentoRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
-  '/biblia': typeof BibliaRoute
   '/biblioteca': typeof BibliotecaRoute
   '/cursos': typeof CursosRoute
   '/doacoes': typeof DoacoesRoute
   '/equipe': typeof EquipeRoute
   '/estudos': typeof EstudosRouteWithChildren
-  '/meus-estudos': typeof MeusEstudosRoute
   '/mural': typeof MuralRoute
   '/radio': typeof RadioRoute
   '/servicos': typeof ServicosRoute
   '/sobre': typeof SobreRoute
   '/transporte': typeof TransporteRoute
-  '/api/biblia-ai': typeof ApiBibliaAiRoute
   '/estudos/forum': typeof EstudosForumRoute
 }
 export interface FileRouteTypes {
@@ -187,19 +160,16 @@ export interface FileRouteTypes {
     | '/aconselhamento'
     | '/admin'
     | '/auth'
-    | '/biblia'
     | '/biblioteca'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
     | '/estudos'
-    | '/meus-estudos'
     | '/mural'
     | '/radio'
     | '/servicos'
     | '/sobre'
     | '/transporte'
-    | '/api/biblia-ai'
     | '/estudos/forum'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -207,19 +177,16 @@ export interface FileRouteTypes {
     | '/aconselhamento'
     | '/admin'
     | '/auth'
-    | '/biblia'
     | '/biblioteca'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
     | '/estudos'
-    | '/meus-estudos'
     | '/mural'
     | '/radio'
     | '/servicos'
     | '/sobre'
     | '/transporte'
-    | '/api/biblia-ai'
     | '/estudos/forum'
   id:
     | '__root__'
@@ -227,19 +194,16 @@ export interface FileRouteTypes {
     | '/aconselhamento'
     | '/admin'
     | '/auth'
-    | '/biblia'
     | '/biblioteca'
     | '/cursos'
     | '/doacoes'
     | '/equipe'
     | '/estudos'
-    | '/meus-estudos'
     | '/mural'
     | '/radio'
     | '/servicos'
     | '/sobre'
     | '/transporte'
-    | '/api/biblia-ai'
     | '/estudos/forum'
   fileRoutesById: FileRoutesById
 }
@@ -248,19 +212,16 @@ export interface RootRouteChildren {
   AconselhamentoRoute: typeof AconselhamentoRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
-  BibliaRoute: typeof BibliaRoute
   BibliotecaRoute: typeof BibliotecaRoute
   CursosRoute: typeof CursosRoute
   DoacoesRoute: typeof DoacoesRoute
   EquipeRoute: typeof EquipeRoute
   EstudosRoute: typeof EstudosRouteWithChildren
-  MeusEstudosRoute: typeof MeusEstudosRoute
   MuralRoute: typeof MuralRoute
   RadioRoute: typeof RadioRoute
   ServicosRoute: typeof ServicosRoute
   SobreRoute: typeof SobreRoute
   TransporteRoute: typeof TransporteRoute
-  ApiBibliaAiRoute: typeof ApiBibliaAiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -300,13 +261,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MuralRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/meus-estudos': {
-      id: '/meus-estudos'
-      path: '/meus-estudos'
-      fullPath: '/meus-estudos'
-      preLoaderRoute: typeof MeusEstudosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/estudos': {
       id: '/estudos'
       path: '/estudos'
@@ -340,13 +294,6 @@ declare module '@tanstack/react-router' {
       path: '/biblioteca'
       fullPath: '/biblioteca'
       preLoaderRoute: typeof BibliotecaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/biblia': {
-      id: '/biblia'
-      path: '/biblia'
-      fullPath: '/biblia'
-      preLoaderRoute: typeof BibliaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -384,13 +331,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EstudosForumRouteImport
       parentRoute: typeof EstudosRoute
     }
-    '/api/biblia-ai': {
-      id: '/api/biblia-ai'
-      path: '/api/biblia-ai'
-      fullPath: '/api/biblia-ai'
-      preLoaderRoute: typeof ApiBibliaAiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -410,20 +350,27 @@ const rootRouteChildren: RootRouteChildren = {
   AconselhamentoRoute: AconselhamentoRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
-  BibliaRoute: BibliaRoute,
   BibliotecaRoute: BibliotecaRoute,
   CursosRoute: CursosRoute,
   DoacoesRoute: DoacoesRoute,
   EquipeRoute: EquipeRoute,
   EstudosRoute: EstudosRouteWithChildren,
-  MeusEstudosRoute: MeusEstudosRoute,
   MuralRoute: MuralRoute,
   RadioRoute: RadioRoute,
   ServicosRoute: ServicosRoute,
   SobreRoute: SobreRoute,
   TransporteRoute: TransporteRoute,
-  ApiBibliaAiRoute: ApiBibliaAiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
