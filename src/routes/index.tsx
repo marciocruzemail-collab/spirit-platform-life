@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Heart, Users, BookOpen as BookOpenIcon, Bus, Radio, BookOpen } from "lucide-react";
+import { Heart, Users, BookOpen as BookOpenIcon, Bus, Radio, MessageCircle } from "lucide-react";
 import heroImg from "@/assets/hero-church.jpg";
 
 export const Route = createFileRoute("/")({
