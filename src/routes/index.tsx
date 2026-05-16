@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Heart, Users, BookOpen as BookOpenIcon, Bus, Radio, BookOpen } from "lucide-react";
+import { Heart, Users, BookOpen as BookOpenIcon, Bus, Radio, MessageCircle } from "lucide-react";
 import heroImg from "@/assets/hero-church.jpg";
 
 export const Route = createFileRoute("/")({
@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
 });
 
 const highlights = [
-  { to: "/biblia", icon: BookOpen, title: "Enciclopédia Bíblica IA", desc: "Estude a Bíblia com auxílio inteligente e salve seus estudos." },
+  { to: "/aconselhamento", icon: MessageCircle, title: "Aconselhamento", desc: "Chat anônimo e seguro com nossos conselheiros." },
   { to: "/doacoes", icon: Heart, title: "Doações", desc: "Doe ou receba alimentos com carinho." },
   { to: "/transporte", icon: Bus, title: "Transporte gratuito", desc: "Nossa Kombi passa no seu bairro." },
   { to: "/estudos", icon: BookOpenIcon, title: "Estudos bíblicos", desc: "Infantil, Teen, Crazy e Full." },
@@ -38,21 +38,21 @@ function Home() {
               Um lugar de fé, esperança e acolhimento.
             </h1>
             <p className="mt-5 text-lg text-muted-foreground max-w-xl">
-              Cultos quarta, sexta e domingo. Venha conhecer nossa comunidade, os projetos sociais
-              e a nova Enciclopédia Bíblica com IA para estudar a Palavra.
+              Cultos quarta, sexta e domingo. Venha conhecer nossa comunidade e
+              os projetos sociais.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/biblia"
+                to="/sobre"
                 className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] hover:opacity-95 transition"
               >
-                Estudar a Bíblia com IA
+                Nossa história
               </Link>
               <Link
-                to="/sobre"
+                to="/aconselhamento"
                 className="rounded-full border border-border bg-card px-6 py-3 text-sm font-medium hover:bg-secondary transition"
               >
-                Nossa história
+                Falar com um conselheiro
               </Link>
             </div>
           </div>
