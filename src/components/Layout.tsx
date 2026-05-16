@@ -126,9 +126,6 @@ export function Layout() {
                       <Shield className="h-4 w-4" /> Painel Admin
                     </Link>
                   )}
-                  <Link to="/meus-estudos" onClick={() => setOpen(false)} className="col-span-2 rounded-lg bg-accent/20 px-3 py-2 text-sm flex items-center gap-2">
-                    <BookOpenCheck className="h-4 w-4" /> Meus estudos
-                  </Link>
                   <button onClick={() => { logout(); setOpen(false); }} className="col-span-2 rounded-lg border border-border px-3 py-2 text-sm">
                     Sair ({userEmail})
                   </button>
