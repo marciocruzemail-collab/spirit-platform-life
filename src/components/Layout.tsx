@@ -12,7 +12,7 @@ const navItems = [
   { to: "/transporte", label: "Transporte" },
   { to: "/estudos", label: "Estudos" },
   { to: "/cursos", label: "Cursos" },
-  { to: "/biblia", label: "Bíblia IA" },
+  
   { to: "/biblioteca", label: "Biblioteca" },
   { to: "/aconselhamento", label: "Aconselhamento" },
   { to: "/servicos", label: "Serviços" },
