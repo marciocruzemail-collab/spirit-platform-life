@@ -44,12 +44,9 @@ function Biblia() {
     setSaved(false);
 
     try {
-      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/biblia-ai`, {
+      const resp = await fetch(`/api/biblia-ai`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: next }),
       });
 
